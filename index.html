@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="M365 Cookbook mockup: documented reporting ideas for Microsoft 365 workloads, Power Platform, and Copilot.">
+  <title>M365 Cookbook | Mockup</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.5;
+    }
+    button, input { font: inherit; }
+    button, a, input { min-height: 44px; }
+    a { color: var(--cp-accent); }
+    :focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 3px; }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar { border-bottom: 1px solid var(--cp-border); background: var(--cp-bg-elevated); }
+    .topbar-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 18px; min-height: 64px; flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; color: var(--cp-text); text-decoration: none; font-weight: 700; }
+    .brand-mark {
+      display: grid; place-items: center; width: 34px; height: 34px;
+      border-radius: 10px; background: var(--cp-accent); color: var(--cp-accent-fg);
+      font-size: .82rem; letter-spacing: -.04em;
+    }
+    .top-links { display: flex; align-items: center; gap: 22px; }
+    .top-links a { color: var(--cp-text-soft); text-decoration: none; }
+    .top-links a:hover { color: var(--cp-accent); }
+    main { padding-bottom: 56px; }
+    .hero { padding: 54px 0 30px; }
+    .hero-layout { display: grid; grid-template-columns: minmax(0,1fr) 260px; gap: 40px; align-items: end; }
+    .eyebrow { display: flex; align-items: center; gap: 9px; color: var(--cp-accent); font-size: .85rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .eyebrow-mark { width: 24px; height: 2px; background: var(--cp-accent); }
+    h1 { max-width: 740px; margin: 14px 0 14px; font-size: clamp(2.6rem, 6vw, 4.5rem); letter-spacing: -.065em; line-height: 1.02; }
+    .hero-copy { max-width: 680px; margin: 0; color: var(--cp-text-soft); font-size: 1.15rem; }
+    .hero-note {
+      padding: 17px; border: 1px solid var(--cp-border); border-radius: 16px;
+      background: var(--cp-surface);
+    }
+    .hero-note span { display: block; color: var(--cp-text-soft); font-size: .88rem; }
+    .hero-note strong { display: block; margin: 2px 0; font-size: 1.9rem; letter-spacing: -.04em; }
+    .hero-note p { margin: 0; color: var(--cp-text-muted); font-size: .88rem; }
+    .notice {
+      display: flex; gap: 12px; align-items: flex-start; margin: 0 0 27px;
+      padding: 13px 15px; border: 1px solid var(--cp-border); border-left: 4px solid var(--cp-warning);
+      border-radius: 10px; background: var(--cp-surface); color: var(--cp-text-soft); font-size: .93rem;
+    }
+    .notice strong { color: var(--cp-text); }
+    .notice-icon { flex: none; color: var(--cp-warning); font-weight: 800; }
+    .setup { margin: 0 0 32px; padding: 22px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); }
+    .setup h2 { margin: 0 0 6px; font-size: 1.35rem; }
+    .setup-intro { margin: 0 0 16px; color: var(--cp-text-soft); }
+    .setup-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .setup-card { padding: 15px; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-bg-elevated); }
+    .setup-card h3 { margin: 0 0 7px; font-size: 1rem; }
+    .setup-card p, .setup-card li { color: var(--cp-text-soft); font-size: .9rem; }
+    .setup-card p { margin: 0; }
+    .setup-card ol { margin: 7px 0 0; padding-left: 20px; }
+    .setup-card li { margin: 5px 0; }
+    .setup-table-wrap { overflow-x: auto; margin-top: 18px; }
+    .setup-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    .setup-table th, .setup-table td { padding: 9px 10px; border: 1px solid var(--cp-border); text-align: left; vertical-align: top; }
+    .setup-table th { background: var(--cp-surface-soft); }
+    .catalog-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 17px; }
+    .catalog-head h2 { margin: 0; font-size: 1.5rem; letter-spacing: -.03em; }
+    .catalog-head p { margin: 4px 0 0; color: var(--cp-text-soft); }
+    .search-wrap { position: relative; width: min(360px, 100%); }
+    .search-icon { position: absolute; left: 13px; top: 10px; color: var(--cp-text-soft); pointer-events: none; }
+    .search {
+      width: 100%; height: 46px; padding: 0 14px 0 40px;
+      border: 1px solid var(--cp-border-strong); border-radius: 10px;
+      background: var(--cp-surface); color: var(--cp-text);
+    }
+    .workloads { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+    .workload {
+      display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 7px 13px;
+      border: 1px solid var(--cp-border); border-radius: 999px; background: var(--cp-surface);
+      color: var(--cp-text-muted); cursor: pointer;
+    }
+    .workload[aria-pressed="true"] { border-color: var(--cp-accent); background: var(--cp-accent); color: var(--cp-accent-fg); }
+    .workload-count { opacity: .75; font-size: .83rem; }
+    .result-line { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0 13px; color: var(--cp-text-soft); font-size: .9rem; }
+    .grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+    .card {
+      display: flex; flex-direction: column; min-height: 250px; padding: 18px;
+      border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface);
+    }
+    .card-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .number { color: var(--cp-accent); font-size: .82rem; font-weight: 700; letter-spacing: .08em; }
+    .category { padding: 4px 9px; border: 1px solid var(--cp-border); border-radius: 999px; color: var(--cp-text-soft); font-size: .78rem; }
+    .card h3 { margin: 15px 0 7px; font-size: 1.18rem; line-height: 1.35; letter-spacing: -.02em; }
+    .card p { margin: 0 0 15px; color: var(--cp-text-soft); font-size: .94rem; }
+    .card-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: auto; padding-top: 10px; }
+    .permission { overflow-wrap: anywhere; color: var(--cp-text-muted); font-family: Consolas, "Courier New", Courier, monospace; font-size: .78rem; }
+    .open {
+      flex: none; border: 0; background: transparent; color: var(--cp-accent);
+      font-weight: 700; cursor: pointer; padding: 6px 0;
+    }
+    .open:hover { color: var(--cp-accent-hover); }
+    .empty { grid-column: 1/-1; padding: 35px; border: 1px dashed var(--cp-border-strong); border-radius: 16px; color: var(--cp-text-soft); text-align: center; }
+    .foundation {
+      display: grid; grid-template-columns: 1.2fr 2fr; gap: 24px; align-items: center;
+      margin-top: 34px; padding: 21px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface);
+    }
+    .foundation h2 { margin: 0 0 5px; font-size: 1.13rem; }
+    .foundation p { margin: 0; color: var(--cp-text-soft); font-size: .91rem; }
+    .flow-steps { display: flex; align-items: center; justify-content: space-between; gap: 9px; }
+    .step { flex: 1; padding: 11px 10px; border: 1px solid var(--cp-border); border-radius: 10px; text-align: center; font-size: .85rem; font-weight: 600; }
+    .step-num { display: block; margin-bottom: 2px; color: var(--cp-accent); font-size: .73rem; }
+    .arrow { color: var(--cp-text-soft); }
+    footer { padding: 18px 0 28px; border-top: 1px solid var(--cp-border); color: var(--cp-text-soft); font-size: .87rem; }
+    .modal-backdrop { position: fixed; inset: 0; z-index: 4; display: none; align-items: flex-start; justify-content: center; overflow: auto; padding: 5vh 16px; background: var(--cp-overlay); }
+    .modal-backdrop.open { display: flex; }
+    .modal { width: min(680px,100%); padding: 23px; border: 1px solid var(--cp-border-strong); border-radius: 16px; background: var(--cp-panel-strong); }
+    .modal-header { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; }
+    .modal h2 { margin: 5px 0 8px; font-size: 1.6rem; line-height: 1.2; }
+    .modal p { color: var(--cp-text-soft); }
+    .close { min-width: 44px; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface); color: var(--cp-text); cursor: pointer; }
+    .detail-section { padding: 15px 0; border-top: 1px solid var(--cp-border); }
+    .detail-section h3 { margin: 0 0 7px; font-size: .98rem; }
+    .endpoint { display: block; padding: 12px; border-radius: 10px; background: var(--cp-surface-soft); overflow-wrap: anywhere; font-family: Consolas, "Courier New", Courier, monospace; font-size: .89rem; }
+    .detail-section ol { margin: 8px 0 0; padding-left: 22px; color: var(--cp-text-soft); }
+    .detail-section li { margin: 7px 0; }
+    .modal-actions { display: flex; gap: 9px; flex-wrap: wrap; padding-top: 15px; border-top: 1px solid var(--cp-border); }
+    .action { min-height: 42px; padding: 7px 12px; border: 1px solid var(--cp-border-strong); border-radius: 10px; background: var(--cp-surface); color: var(--cp-text); font-weight: 600; cursor: pointer; }
+    .action.primary { border-color: var(--cp-accent); background: var(--cp-accent); color: var(--cp-accent-fg); }
+    .toast { position: fixed; right: 18px; bottom: 18px; z-index: 6; display: none; max-width: min(420px,calc(100% - 36px)); padding: 12px 16px; border: 1px solid var(--cp-border-strong); border-radius: 10px; background: var(--cp-surface); color: var(--cp-text); box-shadow: var(--cp-shadow); }
+    .toast.open { display: block; }
+    @media (max-width: 850px) {
+      .hero-layout { grid-template-columns: 1fr; gap: 22px; }
+      .hero-note { max-width: 310px; }
+      .grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .foundation { grid-template-columns: 1fr; }
+      .setup-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .wrap { width: min(100% - 28px,1120px); }
+      .top-links { gap: 12px; font-size: .9rem; }
+      .hero { padding-top: 38px; }
+      .catalog-head { align-items: stretch; flex-direction: column; }
+      .search-wrap { width: 100%; }
+      .grid { grid-template-columns: 1fr; }
+      .flow-steps { align-items: stretch; flex-direction: column; }
+      .arrow { transform: rotate(90deg); align-self: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#" aria-label="M365 Cookbook home">
+        <span class="brand-mark" aria-hidden="true">M365</span>
+        <span>M365 Cookbook</span>
+      </a>
+      <nav class="top-links" aria-label="Main navigation">
+        <a href="#catalog">Explore flows</a>
+        <a href="#getting-started">Getting started</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-layout">
+        <div>
+          <div class="eyebrow"><span class="eyebrow-mark"></span> Admin Flow Cookbook · Workload edition</div>
+          <h1 id="page-title">M365,<br>made reviewable.</h1>
+          <p class="hero-copy">Practical reporting flows across Teams, SharePoint, OneDrive, Exchange, Power Platform, and Microsoft 365 Copilot. Find a documented API pattern, inspect its access requirements, then build it in Power Automate.</p>
+        </div>
+        <aside class="hero-note" aria-label="Volume summary">
+          <span>Featured in this mockup</span>
+          <strong>11</strong>
+          <p>workload reporting patterns, with API docs linked on every recipe</p>
+        </aside>
+      </div>
+    </section>
+    <div class="notice">
+      <span class="notice-icon" aria-hidden="true">!</span>
+      <div><strong>Workload focus, not an Entra duplicate.</strong> The Entra cookbook already covers directory users, groups, apps, roles, risk, Conditional Access, devices, tenant settings, and service health. This catalog focuses on Microsoft 365 workload reports and Power Platform resource inventory. Each recipe includes the full request, documented permission, build outline, caveats, and a Microsoft reference.</div>
+    </div>
+
+    <section id="getting-started" class="setup" aria-labelledby="setup-title">
+      <div class="eyebrow"><span class="eyebrow-mark"></span> Start here · shared foundation</div>
+      <h2 id="setup-title">Build your first M365 reporting flow</h2>
+      <p class="setup-intro">Start with the recipe card for its exact method, API host, permission, output format, and flow-specific steps. API families differ, so don’t assume every response is JSON or every service uses Microsoft Graph.</p>
+      <div class="setup-grid">
+        <article class="setup-card">
+          <h3>1 · Choose the matching API</h3>
+          <ol>
+            <li>Microsoft Graph usage reports use <code>graph.microsoft.com/v1.0</code> and require <code>Reports.Read.All</code>. The Copilot report is under <code>/copilot/reports/</code>.</li>
+            <li>Those report endpoints return CSV; some respond with a short-lived download redirect. They are not regular JSON <code>value</code> collections.</li>
+            <li>Power Platform inventory uses <code>api.powerplatform.com</code>, not Graph, and requires delegated user authentication.</li>
+          </ol>
+        </article>
+        <article class="setup-card">
+          <h3>2 · Prepare authentication</h3>
+          <ol>
+            <li>In Power Automate, create a scheduled cloud flow and add an approved HTTP action or custom connector.</li>
+            <li>For Graph app-only recipes, add only the documented Application permission to the app registration and have an admin grant consent.</li>
+            <li>Store credentials in an approved secure connection or vault; never place secrets in a URL, flow output, or report.</li>
+          </ol>
+        </article>
+        <article class="setup-card">
+          <h3>3 · Handle and protect the report</h3>
+          <ol>
+            <li>Use the recipe’s exact HTTP method and copy its full request. Graph report CSV needs CSV-aware handling; don’t use Parse JSON on it.</li>
+            <li>For Power Platform inventory, send the documented JSON query body using delegated authentication and handle its paging token.</li>
+            <li>Minimize user-level data, restrict run-history access and recipients, and verify licensing, cloud availability, retention, and tenant policy.</li>
+          </ol>
+        </article>
+      </div>
+      <div class="setup-table-wrap">
+        <h3>Standard HTTP action fields for Microsoft Graph reports</h3>
+        <table class="setup-table">
+          <thead><tr><th scope="col">Field</th><th scope="col">Value</th><th scope="col">Notes</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Method</th><td><code>GET</code></td><td>Use the method shown on the recipe. Graph usage-report examples are GET requests.</td></tr>
+            <tr><th scope="row">URI</th><td>Copy the complete URL from the recipe details.</td><td>Graph reports use Worldwide <code>https://graph.microsoft.com/v1.0</code>. The linked API reference lists supported cloud deployments.</td></tr>
+            <tr><th scope="row">Authentication</th><td>Approved OAuth connection for Microsoft Graph.</td><td>For app-only access, use the registered application with admin-consented <code>Reports.Read.All</code>. Never paste bearer tokens manually.</td></tr>
+            <tr><th scope="row">Body</th><td>Empty for GET.</td><td>The Power Platform inventory POST is a separate API and uses the sample JSON body shown on its recipe card.</td></tr>
+            <tr><th scope="row">Response</th><td>CSV stream or redirect to CSV, depending on the report API.</td><td>Check the recipe’s response note. A 302 download URL is preauthenticated and short-lived; do not attach the Graph bearer token to that URL.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="catalog" aria-labelledby="catalog-title">
+      <div class="catalog-head">
+        <div>
+          <h2 id="catalog-title">Explore M365 reporting ideas</h2>
+          <p>Search across Microsoft 365 workloads and administration surfaces.</p>
+        </div>
+        <label class="search-wrap">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <span class="visually-hidden">Search flow recipes</span>
+          <input id="search" class="search" type="search" placeholder="Try “Copilot usage” or “mailbox storage”…" autocomplete="off">
+        </label>
+      </div>
+      <div class="workloads" role="group" aria-label="Filter by workload">
+        <button class="workload" type="button" data-category="All" aria-pressed="true">All M365 <span class="workload-count"></span></button>
+        <button class="workload" type="button" data-category="Teams" aria-pressed="false">Teams <span class="workload-count"></span></button>
+        <button class="workload" type="button" data-category="SharePoint" aria-pressed="false">SharePoint <span class="workload-count"></span></button>
+        <button class="workload" type="button" data-category="OneDrive" aria-pressed="false">OneDrive <span class="workload-count"></span></button>
+        <button class="workload" type="button" data-category="Exchange" aria-pressed="false">Exchange <span class="workload-count"></span></button>
+        <button class="workload" type="button" data-category="Power Platform" aria-pressed="false">Power Platform <span class="workload-count"></span></button>
+        <button class="workload" type="button" data-category="Copilot" aria-pressed="false">Copilot <span class="workload-count"></span></button>
+      </div>
+      <p class="setup-intro">Cloud availability: the Microsoft Graph Reports API references linked below currently list Worldwide service only. Confirm availability and licensing in your tenant before building a flow.</p>
+      <div class="result-line"><span id="result-count" aria-live="polite">Showing all featured ideas</span><span>Read-only reporting · Graph and Power Platform API</span></div>
+      <div id="cards" class="grid"></div>
+    </section>
+
+    <section class="foundation" aria-labelledby="foundation-title">
+      <div>
+        <h2 id="foundation-title">Every recipe follows the same pattern</h2>
+        <p>Choose a supported read-only task, copy its documented request, then follow its workload-specific build steps.</p>
+      </div>
+      <div class="flow-steps" aria-label="Getting started steps">
+        <div class="step"><span class="step-num">01</span>Choose a flow</div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="step"><span class="step-num">02</span>Copy request &amp; permission</div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="step"><span class="step-num">03</span>Build &amp; share safely</div>
+      </div>
+    </section>
+  </main>
+  <footer id="about">
+    <div class="wrap">Community-made learning resource · Reporting and review only · Usage reports can contain personal or sensitive data. Follow tenant privacy, retention, and access policies.</div>
+  </footer>
+  <div id="modal-backdrop" class="modal-backdrop" role="presentation">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <div><span id="modal-number" class="number"></span><h2 id="modal-title"></h2></div>
+        <button class="close" id="close-modal" type="button" aria-label="Close recipe details">×</button>
+      </div>
+      <p id="modal-summary"></p>
+      <div class="detail-section"><h3>What this flow does</h3><p id="modal-outcome"></p></div>
+      <div class="detail-section"><h3 id="modal-request-label">Microsoft Graph v1.0 request</h3><code class="endpoint" id="modal-endpoint"></code></div>
+      <div class="detail-section"><h3>Access requirements</h3><p id="modal-permission"></p></div>
+      <div class="detail-section"><h3>Response format</h3><p id="modal-response"></p></div>
+      <div class="detail-section" id="request-body-section" hidden><h3>Request body</h3><code class="endpoint" id="modal-body"></code></div>
+      <div class="detail-section"><h3>Power Automate request setup</h3><ol id="modal-setup-steps"></ol></div>
+      <div class="detail-section"><h3>Recipe-specific workflow steps</h3><ol id="modal-steps"></ol></div>
+      <div class="detail-section"><a id="modal-docs" target="_blank" rel="noopener noreferrer">Open Microsoft API documentation</a></div>
+      <p class="notice"><span class="notice-icon" aria-hidden="true">!</span><span id="modal-caveat"></span></p>
+      <div class="modal-actions"><button id="copy-endpoint" class="action primary" type="button">Copy full request URL</button><button id="copy-permission" class="action" type="button">Copy permission</button><button id="copy-body" class="action" type="button" hidden>Copy request body</button></div>
+    </section>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <style>
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  </style>
+  <script>
+    const recipes = [
+      {
+        id: 1, category: "Teams", title: "Teams activity digest",
+        summary: "Summarize Teams usage signals such as chat, calls, meetings, and last activity.",
+        method: "GET",
+        endpoint: "/reports/getTeamsUserActivityUserDetail(period='D30')",
+        permission: "Reports.Read.All (Application or delegated work/school)",
+        response: "HTTP 302 redirect to a preauthenticated CSV download URL; the redirect and download handling must be tested in the chosen HTTP connector.",
+        caveat: "The report includes user-level activity. Protect the CSV and limit recipients. Microsoft documents this report for the global cloud; verify availability for your tenant.",
+        docs: "https://learn.microsoft.com/en-us/graph/api/reportroot-getteamsuseractivityuserdetail?view=graph-rest-1.0",
+        steps: ["Call the documented D30 report and handle its redirect/download response.", "Parse the CSV and select only the activity columns needed.", "Send a restricted digest; define retention for the exported report."]
+      },
+      {
+        id: 2, category: "Teams", title: "Teams device adoption report",
+        summary: "Compare Teams activity by device platform to identify adoption patterns.",
+        method: "GET",
+        endpoint: "/reports/getTeamsDeviceUsageUserDetail(period='D30')",
+        permission: "Reports.Read.All (Application or delegated work/school)",
+        response: "HTTP 302 redirect to a preauthenticated CSV download URL; the redirect and download handling must be tested in the chosen HTTP connector.",
+        caveat: "The report is user-level usage data, not an inventory of managed or compliant devices. The API docs list global-cloud availability.",
+        docs: "https://learn.microsoft.com/en-us/graph/api/reportroot-getteamsdeviceusageuserdetail?view=graph-rest-1.0",
+        steps: ["Download the D30 Teams device usage report.", "Aggregate usage by supported device platform.", "Share only the minimum necessary detail with Teams administrators."]
+      },
+      {
+        id: 3, category: "SharePoint", title: "SharePoint site usage and storage",
+        summary: "Review site activity, file counts, storage, and owner information from the usage report.",
+        method: "GET",
+        endpoint: "/reports/getSharePointSiteUsageDetail(period='D30')",
+        permission: "Reports.Read.All (Application or delegated work/school)",
+        response: "HTTP 302 redirect to a preauthenticated CSV download URL; the redirect and download handling must be tested in the chosen HTTP connector.",
+        caveat: "This is the Microsoft 365 site-usage report, not a full SharePoint permissions or sharing-settings inventory. The API docs list global-cloud availability.",
+        docs: "https://learn.microsoft.com/en-us/graph/api/reportroot-getsharepointsiteusagedetail?view=graph-rest-1.0",
+        steps: ["Download the documented D30 site usage report.", "Identify sites that meet your agreed storage or inactivity review criteria.", "Route findings to site owners; do not infer access rights from usage data."]
+      },
+      {
+        id: 4, category: "SharePoint", title: "External sharing activity review",
+        summary: "Find user-level SharePoint activity counts for externally shared files.",
+        method: "GET",
+        endpoint: "/reports/getSharePointActivityUserDetail(period='D30')",
+        permission: "Reports.Read.All (Application or delegated work/school)",
+        response: "HTTP 302 redirect to a preauthenticated CSV download URL; the redirect and download handling must be tested in the chosen HTTP connector.",
+        caveat: "This report provides activity counts such as shared externally; it does not identify every shared file, guest, or site policy. Treat user-level data as sensitive.",
+        docs: "https://learn.microsoft.com/en-us/graph/api/reportroot-getsharepointactivityuserdetail?view=graph-rest-1.0",
+        steps: ["Download the D30 SharePoint activity report.", "Review the Shared Externally File Count field for trends or owner follow-up.", "Do not interpret the counts as a list of current sharing links."]
+      },
+      {
+        id: 5, category: "OneDrive", title: "OneDrive account storage review",
+        summary: "Review account-level storage, file counts, and last activity from the usage report.",
+        method: "GET",
+        endpoint: "/reports/getOneDriveUsageAccountDetail(period='D30')",
+        permission: "Reports.Read.All (Application or delegated work/school)",
+        response: "HTTP 302 redirect to a preauthenticated CSV download URL; the redirect and download handling must be tested in the chosen HTTP connector.",
+        caveat: "The report contains account identifiers and activity data. The API docs list global-cloud availability; verify tenant reporting and retention requirements.",
+        docs: "https://learn.microsoft.com/en-us/graph/api/reportroot-getonedriveusageaccountdetail?view=graph-rest-1.0",
+        steps: ["Download the D30 OneDrive account usage report.", "Flag storage or inactivity thresholds approved by your organization.", "Send a restricted owner review; do not treat inactivity as a deletion decision."]
+      },
+      {
+        id: 6, category: "OneDrive", title: "OneDrive external sharing activity",
+        summary: "Trend user-level counts for files shared externally, synced, and viewed or edited.",
+        method: "GET",
+        endpoint: "/reports/getOneDriveActivityUserDetail(period='D30')",
+        permission: "Reports.Read.All (Application or delegated work/school)",
+        response: "HTTP 302 redirect to a preauthenticated CSV download URL; the redirect and download handling must be tested in the chosen HTTP connector.",
+        caveat: "Activity counts are not a list of current links or their recipients. Treat user-level data as sensitive; the API docs list global-cloud availability.",
+        docs: "https://learn.microsoft.com/en-us/graph/api/reportroot-getonedriveactivityuserdetail?view=graph-rest-1.0",
+        steps: ["Download the D30 OneDrive activity report.", "Review the Shared Externally File Count field as an activity signal.", "Follow up through the approved sharing-review process; do not claim this report enumerates links."]
+      },
+      {
+        id: 7, category: "Exchange", title: "Mailbox storage and quota review",
+        summary: "Review mailbox item counts, storage usage, quotas, archive status, and last activity.",
+        method: "GET",
+        endpoint: "/reports/getMailboxUsageDetail(period='D30')",
+        permission: "Reports.Read.All (Application or delegated work/school)",
+        response: "HTTP 302 redirect to a preauthenticated CSV download URL; the redirect and download handling must be tested in the chosen HTTP connector.",
+        caveat: "This report provides mailbox usage, not mailbox forwarding rules or a complete shared-mailbox directory. The API docs list global-cloud availability.",
+        docs: "https://learn.microsoft.com/en-us/graph/api/reportroot-getmailboxusagedetail?view=graph-rest-1.0",
+        steps: ["Download the documented D30 mailbox usage report.", "Compare storage and quota fields with administrator-approved thresholds.", "Route possible capacity issues to Exchange administrators."]
+      },
+      {
+        id: 8, category: "Exchange", title: "Email activity digest",
+        summary: "Summarize send, receive, and read activity for a bounded reporting period.",
+        method: "GET",
+        endpoint: "/reports/getEmailActivityUserDetail(period='D30')",
+        permission: "Reports.Read.All (Application or delegated work/school)",
+        response: "HTTP 302 redirect to a preauthenticated CSV download URL; the redirect and download handling must be tested in the chosen HTTP connector.",
+        caveat: "This is a usage report, not message content or an audit trail. Protect user-level data and validate report availability for your tenant.",
+        docs: "https://learn.microsoft.com/en-us/graph/api/reportroot-getemailactivityuserdetail?view=graph-rest-1.0",
+        steps: ["Download the D30 email activity report.", "Aggregate activity fields that support a documented operational question.", "Restrict report recipients and retention."]
+      },
+      {
+        id: 9, category: "Exchange", title: "Email app adoption report",
+        summary: "Compare reported use of Outlook and other supported email clients.",
+        method: "GET",
+        endpoint: "/reports/getEmailAppUsageUserDetail(period='D30')",
+        permission: "Reports.Read.All (Application or delegated work/school)",
+        response: "CSV report via a short-lived download redirect (HTTP 302).",
+        caveat: "This reports usage by app, not sign-in risk, protocol configuration, or mailbox forwarding. The API docs list global-cloud availability.",
+        docs: "https://learn.microsoft.com/en-us/graph/api/reportroot-getemailappusageuserdetail?view=graph-rest-1.0",
+        steps: ["Download the D30 email app usage report.", "Aggregate client usage for a migration or support review.", "Avoid treating an absent activity value as proof of non-use."]
+      },
+      {
+        id: 10, category: "Power Platform", title: "Power Platform resource inventory",
+        summary: "Inventory Power Platform resources such as environments, apps, flows, and agents.",
+        method: "POST",
+        endpoint: "https://api.powerplatform.com/resourcequery/resources/query?api-version=2024-10-01",
+        requestBody: JSON.stringify({ TableName: "PowerPlatformResources", Clauses: [], Options: { Top: 50 } }, null, 2),
+        permission: "Power Platform API · delegated user authentication only",
+        response: "JSON resource-query response with paging information.",
+        caveat: "This is the Power Platform Inventory API, not Microsoft Graph. It requires delegated user authentication; service principals and managed identities are not supported. Check the inventory schema and preview/availability notes.",
+        docs: "https://learn.microsoft.com/en-us/power-platform/admin/inventory-api",
+        steps: ["Use a supported delegated user sign-in for the Power Platform API.", "POST a documented query for the PowerPlatformResources table and approved resource types.", "Process response.data and its paging token; limit access to the tenant-wide inventory."]
+      },
+      {
+        id: 11, category: "Copilot", title: "Microsoft 365 Copilot usage report",
+        summary: "Review licensed-user Copilot activity and adoption over the supported reporting period.",
+        method: "GET",
+        endpoint: "/copilot/reports/getMicrosoft365CopilotUsageUserDetail(period='D28',version='v2')",
+        permission: "Reports.Read.All (Application or delegated work/school)",
+        response: "HTTP 200 with a CSV stream from the Microsoft Graph v1.0 endpoint.",
+        caveat: "The report only includes users with a Microsoft 365 Copilot license; unlicensed Copilot Chat usage is not available through this report. The API docs list global-cloud availability.",
+        docs: "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/api/admin-settings/reports/copilotreportroot-getmicrosoft365copilotusageuserdetail",
+        steps: ["Download the documented v1.0 report using period D28 and report version v2.", "Use only fields needed for the adoption question; minimize identifiable data.", "Restrict the CSV and account for report refresh delays."]
+      }
+    ];
+    const cards = document.getElementById("cards");
+    const search = document.getElementById("search");
+    const count = document.getElementById("result-count");
+    const workloadButtons = [...document.querySelectorAll(".workload")];
+    let activeCategory = "All";
+    let lastTrigger = null;
+    let activeRecipe = null;
+
+    workloadButtons.forEach((button) => {
+      const category = button.dataset.category;
+      const total = category === "All" ? recipes.length : recipes.filter((recipe) => recipe.category === category).length;
+      button.querySelector(".workload-count").textContent = total;
+    });
+
+    function renderCards() {
+      const query = search.value.trim().toLowerCase();
+      const visible = recipes.filter((recipe) => {
+        const categoryMatches = activeCategory === "All" || recipe.category === activeCategory;
+        const queryMatches = `${recipe.category} ${recipe.title} ${recipe.summary} ${recipe.endpoint} ${recipe.permission}`.toLowerCase().includes(query);
+        return categoryMatches && queryMatches;
+      });
+      count.textContent = `Showing ${visible.length} of ${recipes.length} featured ${visible.length === 1 ? "idea" : "ideas"}`;
+      cards.innerHTML = visible.length ? visible.map((recipe) => `
+        <article class="card">
+          <div class="card-top"><span class="number">FLOW ${recipe.id}</span><span class="category">${recipe.category}</span></div>
+          <h3>${recipe.title}</h3>
+          <p>${recipe.summary}</p>
+          <div class="card-foot">
+            <span class="permission">${recipe.permission.split(" (")[0].split(" · ")[0]}</span>
+            <button class="open" type="button" data-recipe="${recipe.id}">View flow <span aria-hidden="true">→</span></button>
+          </div>
+        </article>
+      `).join("") : '<div class="empty">No matching ideas. Try another search or workload.</div>';
+      cards.querySelectorAll("[data-recipe]").forEach((button) => {
+        button.addEventListener("click", () => showRecipe(Number(button.dataset.recipe)));
+      });
+    }
+
+    function showRecipe(id) {
+      const recipe = recipes.find((entry) => entry.id === id);
+      if (!recipe) return;
+      lastTrigger = document.querySelector(`[data-recipe="${id}"]`);
+      activeRecipe = recipe;
+      document.getElementById("modal-number").textContent = `FLOW ${recipe.id} · ${recipe.category}`;
+      document.getElementById("modal-title").textContent = recipe.title;
+      document.getElementById("modal-summary").textContent = `Read-only ${recipe.category} reporting workflow · Flow ${recipe.id}`;
+      document.getElementById("modal-outcome").textContent = recipe.summary;
+      const fullEndpoint = recipe.endpoint.startsWith("https://")
+        ? recipe.endpoint
+        : `https://graph.microsoft.com/v1.0${recipe.endpoint}`;
+      document.getElementById("modal-request-label").textContent =
+        `${recipe.category === "Power Platform" ? "Power Platform API" : "Microsoft Graph v1.0"} request · ${recipe.method}`;
+      document.getElementById("modal-endpoint").textContent = `${recipe.method} ${fullEndpoint}`;
+      document.getElementById("modal-permission").textContent = recipe.permission;
+      document.getElementById("modal-response").textContent = recipe.response;
+      document.getElementById("modal-caveat").textContent = recipe.caveat;
+      const bodySection = document.getElementById("request-body-section");
+      const copyBodyButton = document.getElementById("copy-body");
+      bodySection.hidden = !recipe.requestBody;
+      copyBodyButton.hidden = !recipe.requestBody;
+      document.getElementById("modal-body").textContent = recipe.requestBody || "";
+      const docs = document.getElementById("modal-docs");
+      docs.href = recipe.docs;
+      const setupSteps = recipe.category === "Power Platform"
+        ? [
+          "Create a scheduled cloud flow and use a supported delegated OAuth connection for the Power Platform API.",
+          "Add an HTTP POST action with Content-Type application/json; paste the full request URL and the JSON body shown above.",
+          "Sign in as an authorized user. This API does not support service-principal or managed-identity app-only authentication."
+        ]
+        : [
+          "Create a scheduled cloud flow and add the approved HTTP action or connector for Microsoft Graph.",
+          "Set Method to GET and paste the complete Graph URL above. Use an OAuth connection for your tenant and the Worldwide Graph endpoint.",
+          "For app-only access, grant the documented Reports.Read.All Application permission with admin consent. Check the response format and handle CSV, not Parse JSON."
+        ];
+      const setupList = document.getElementById("modal-setup-steps");
+      setupList.replaceChildren(...setupSteps.map((step) => {
+        const item = document.createElement("li");
+        item.textContent = step;
+        return item;
+      }));
+      const steps = document.getElementById("modal-steps");
+      steps.replaceChildren(...recipe.steps.map((step) => {
+        const item = document.createElement("li");
+        item.textContent = step;
+        return item;
+      }));
+      document.getElementById("modal-backdrop").classList.add("open");
+      document.getElementById("close-modal").focus();
+    }
+
+    workloadButtons.forEach((button) => button.addEventListener("click", () => {
+      activeCategory = button.dataset.category;
+      workloadButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+      renderCards();
+    }));
+    search.addEventListener("input", renderCards);
+    function closeModal() {
+      const backdrop = document.getElementById("modal-backdrop");
+      if (!backdrop.classList.contains("open")) return;
+      backdrop.classList.remove("open");
+      lastTrigger?.focus();
+    }
+    document.getElementById("close-modal").addEventListener("click", closeModal);
+    document.getElementById("modal-backdrop").addEventListener("click", (event) => {
+      if (event.target.id === "modal-backdrop") closeModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeModal();
+        return;
+      }
+      if (event.key !== "Tab" || !document.getElementById("modal-backdrop").classList.contains("open")) return;
+      const focusable = [...document.querySelectorAll("#modal-backdrop a[href], #modal-backdrop button:not([hidden])")];
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+    async function copyValue(value, label) {
+      const toast = document.getElementById("toast");
+      try {
+        if (!navigator.clipboard?.writeText) throw new Error("Clipboard access is not available in this browser context.");
+        await navigator.clipboard.writeText(value);
+        toast.textContent = `${label} copied.`;
+      } catch (error) {
+        toast.textContent = `${label} could not be copied. Select it in the recipe details and copy it manually. ${error.message}`;
+      }
+      toast.classList.add("open");
+      window.clearTimeout(copyValue.toastTimer);
+      copyValue.toastTimer = window.setTimeout(() => toast.classList.remove("open"), 4500);
+    }
+    document.getElementById("copy-endpoint").addEventListener("click", () => {
+      if (!activeRecipe) return;
+      const fullEndpoint = activeRecipe.endpoint.startsWith("https://")
+        ? activeRecipe.endpoint
+        : `https://graph.microsoft.com/v1.0${activeRecipe.endpoint}`;
+      copyValue(fullEndpoint, "Full request URL");
+    });
+    document.getElementById("copy-permission").addEventListener("click", () => {
+      if (!activeRecipe) return;
+      const accessRequirement = activeRecipe.category === "Power Platform"
+        ? activeRecipe.permission
+        : activeRecipe.permission.split(" (")[0].split(" · ")[0];
+      copyValue(accessRequirement, "Access requirement");
+    });
+    document.getElementById("copy-body").addEventListener("click", () => {
+      if (activeRecipe?.requestBody) copyValue(activeRecipe.requestBody, "Request body");
+    });
+    renderCards();
+  </script>
+</body>
+</html>
